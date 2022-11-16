@@ -1,0 +1,16 @@
+- name: "deploy MySQL"
+  hosts: localhost
+  become: true
+
+  tasks:
+    - name: install mysql
+      ansible.builtin.apt:
+        name: mysql-server
+        state: present
+        update_cache: yes
+      become: yes
+    - name: mysql systemd
+      systemd:
+        name: mysql.service
+        enabled: yes
+        state: started
