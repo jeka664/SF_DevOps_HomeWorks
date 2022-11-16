@@ -1,0 +1,35 @@
+- name: create group
+  ansible.builtin.group:
+     name: superusers
+     state: present
+  become: yes
+
+- name: Insert group to sudoers
+  lineinfile:
+     path: /etc/sudoers
+     line: '%superusers   ALL=(ALL:ALL) ALL'
+     validate: /usr/sbin/visudo -cf %s
+  become: yes
+
+- name: create user2
+  ansible.builtin.user:
+     name: user2
+     password: "{{ 'password' | password_hash('sha512', 'password') }}"
+     state: "present"
+     groups: superusers
+     shell: "/bin/bash"
+     system: false
+     create_home: true
+     home: "/home/user2"
+     comment: "Ansible user2"
+- name: create user3
+  ansible.builtin.user:
+     name: user3
+     password: "{{ 'password' | password_hash('sha512', 'password') }}"
+     state: "present"
+     groups: superusers
+     shell: "/bin/bash"
+     system: false
+     create_home: true
+     home: "/home/user3"
+     comment: "Ansible user3"

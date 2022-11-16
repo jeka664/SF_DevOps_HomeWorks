@@ -1,0 +1,5 @@
+- name: "create group"
+  hosts: group
+  become: true
+  roles:
+    - role: "./Roles/create_group"

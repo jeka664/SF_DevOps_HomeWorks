@@ -1,0 +1,28 @@
+- name: install dnsmasq
+  ansible.builtin.apt:
+    name: dnsmasq
+    state: latest
+    update_cache: yes
+  become: yes
+
+- name: copy config
+  copy:
+    src: ../files/dnsmasq.conf
+    dest: /etc/dnsmasq.conf
+#    mode: 0644
+    owner: user1 
+    group: user1
+  become: yes
+
+- name:  systemd-resolved systemd
+  systemd:
+    name: systemd-resolved.service
+    enabled: no
+    state: stopped
+
+- name: dnsmasq systemd
+  systemd:
+    name: dnsmasq.service
+    enabled: yes
+    state: restarted
+

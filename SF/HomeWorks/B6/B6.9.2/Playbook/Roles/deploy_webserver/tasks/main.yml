@@ -1,0 +1,54 @@
+- name: install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: latest
+    update_cache: yes
+  become: yes
+
+- name: nginx systemd
+  systemd:
+    name: nginx.service
+    enabled: yes
+    state: started
+
+- name: Install PHP PPA Repo
+  apt_repository:
+    repo: 'ppa:ondrej/php'
+
+- name: Install PHP 7.4
+  ansible.builtin.apt:
+     name: php7.4 
+     state: latest
+
+- name: Install PHP packages
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - php7.4-curl
+    - php7.4-fpm
+    - php7.4-intl
+    - php7.4-xml
+    - php7.4-mbstring
+
+- name: Creates directory
+  file:
+    path: /opt/nginx/ansible
+    state: directory
+
+- name: copy index.php
+  copy:
+    src: ../files/index.php
+    dest:  /opt/nginx/ansible/index.php
+
+- name: copy config
+  copy:
+    src: ../files/default
+    dest:  /etc/nginx/sites-available/default
+    owner: root
+    group: root
+  become: yes
+  notify:
+    - Restart nginx
+
