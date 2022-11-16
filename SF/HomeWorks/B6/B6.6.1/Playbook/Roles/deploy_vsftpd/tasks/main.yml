@@ -1,0 +1,12 @@
+- name: install vsftpd
+  ansible.builtin.apt:
+    name: vsftpd
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: vsftpd systemd
+  systemd:
+    name: vsftpd.service
+    enabled: yes
+    state: started

@@ -1,0 +1,5 @@
+- name: "deploy vsftp"
+  hosts: vsftp
+  become: true
+  roles:
+    - role: "./Roles/deploy_vsftpd"
