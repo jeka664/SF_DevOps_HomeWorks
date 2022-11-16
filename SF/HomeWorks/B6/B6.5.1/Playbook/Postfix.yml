@@ -1,0 +1,24 @@
+- name: "deploy Postfix"
+  hosts: postfix
+  become: true
+
+  tasks:
+    - name: install postfix
+      tags: "init postfix"
+      ansible.builtin.apt:
+        name: postfix
+        state: present
+        update_cache: yes
+      become: yes
+    - name: postfix systemd
+      tags: "init postfix"
+      systemd:
+        name: postfix.service
+        enabled: yes
+        state: started
+    - name: remove postfix
+      tags: "drop postfix"
+      ansible.builtin.apt:
+        name: postfix
+        state: absent
+      become: yes

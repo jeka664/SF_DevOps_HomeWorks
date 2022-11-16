@@ -1,0 +1,36 @@
+- name: user module demo
+  hosts: user
+  become: true
+  tasks:
+    - name: create user
+      ansible.builtin.user:
+        name: example
+        password: "{{ 'password' | password_hash('sha512', 'mysecretsalt') }}"
+        state: "present"
+        shell: "/bin/bash"
+        system: false
+        create_home: true
+        home: "/home/example"
+        comment: "Ansible example"
+    - name: Creates directory
+      file:
+        path: /home/example/.ssh
+        state: directory
+    - name: Copy private key
+      copy:
+        src: Key/id_rsa
+        dest: /home/example/.ssh/id_rsa
+        decrypt: yes
+        owner: example 
+        group: example
+##        mode: 777
+        backup: no
+    - name: Copy public key
+      copy:
+        src: Key/id_rsa.pub    
+        dest: /home/example/.ssh/id_rsa.pub      
+        decrypt: yes
+        owner: example
+        group: example 
+##        mode: 777
+        backup: no
