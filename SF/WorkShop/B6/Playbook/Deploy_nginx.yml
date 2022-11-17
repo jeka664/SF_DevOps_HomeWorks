@@ -1,0 +1,5 @@
+- name: "deploy web nginx"
+  hosts: web
+  become: true
+  roles:
+    - role: "./Roles/http"

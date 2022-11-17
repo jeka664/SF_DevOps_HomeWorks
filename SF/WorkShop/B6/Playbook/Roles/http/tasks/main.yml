@@ -1,0 +1,22 @@
+- name: install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: latest
+    update_cache: yes
+  become: yes
+
+- name: nginx systemd
+  systemd:
+    name: nginx.service
+    enabled: yes
+    state: started
+
+- name: copy config
+  copy:
+    src: ../files/default
+    dest:  /etc/nginx/sites-available/default
+    owner: root
+    group: root
+  become: yes
+  notify:
+    - Restart nginx

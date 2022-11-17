@@ -1,0 +1,5 @@
+- name: "deploy php"
+  hosts: php
+  become: true
+  roles:
+    - role: "./Roles/php"

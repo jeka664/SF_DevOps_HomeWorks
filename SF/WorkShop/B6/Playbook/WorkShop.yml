@@ -1,0 +1,17 @@
+- name: "create user"
+  hosts: workshop
+  become: true
+  roles:
+    - role: "./Roles/users"
+
+- name: "deploy web nginx"
+  hosts: web
+  become: true
+  roles:
+    - role: "./Roles/http"
+
+- name: "deploy php"
+  hosts: php
+  become: true
+  roles:
+    - role: "./Roles/php"

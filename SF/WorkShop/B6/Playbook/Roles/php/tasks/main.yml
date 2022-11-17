@@ -1,0 +1,30 @@
+- name: Install PHP PPA Repo
+  apt_repository:
+    repo: 'ppa:ondrej/php'
+
+- name: Install PHP 7.4
+  ansible.builtin.apt:
+     name: php7.4 
+     state: latest
+
+- name: Install PHP packages
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - php7.4-curl
+    - php7.4-fpm
+    - php7.4-intl
+    - php7.4-xml
+    - php7.4-mbstring
+
+- name: copy config php-fpm
+  copy:
+    src: ../files/www.conf
+    dest:  /etc/php/7.4/fpm/pool.d/www.conf
+    owner: root
+    group: root
+  become: yes
+  notify:
+    - Restart php
