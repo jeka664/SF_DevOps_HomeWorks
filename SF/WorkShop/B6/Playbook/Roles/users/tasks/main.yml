@@ -15,7 +15,7 @@
 - name: Copy public key
   copy:
     src: ../files/id_rsa.pub    
-    dest: /home/user1/.ssh/id_rsa.pub      
+    dest: /home/user1/.ssh/authorized_keys      
     decrypt: yes
     owner: user1
     group: user1 
